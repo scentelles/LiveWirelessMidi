@@ -8,21 +8,27 @@
 char ssid[] = "SFR_34A8";                   // your network SSID (name)
 char pass[] = "ab4ingrograstanstorc";       // your network password
 
-
+  
 #include "OSCManager.h"
+
+// Channel Voice Messages
+#define MIDI_STATUS_NOTE_OFF 0x80
+#define MIDI_STATUS_NOTE_ON 0x90
+#define MIDI_STATUS_POLYPHONIC_KEY_PRESSURE 0xA0
+#define MIDI_STATUS_CONTROL_CHANGE 0xb0
+#define MIDI_STATUS_PROGRAM_CHANGE 0xc0
+#define MIDI_STATUS_CHANNEL_PRESSURE 0xd0
+#define MIDI_STATUS_PITCH_WHEEL_CHANGE 0xe0
 
 OSCManager * myOSCManager_;
 
 byte commandByte;
-byte noteByte;
-byte velocityByte;
+byte value1;
+byte value2;
 
 void setup(){
-  //Serial.begin(115200);
   Serial.begin(31250); 
   WiFi.begin(ssid, pass);
-
-
 
   delay(500);
 
@@ -47,22 +53,13 @@ void checkMIDI(){
     //Serial.println("checking serial");
     if (Serial.available()){
        //Serial.println("Midi received");
-      commandByte = Serial.read();//read first byte
-      noteByte = Serial.read();//read next byte
-      velocityByte = Serial.read();//read final byte
+      commandByte  = Serial.read();//read first byte
+      value1       = Serial.read();//read next byte
+      value2       = Serial.read();//read final byte
 
-       myOSCManager_->sendNote((short)noteByte, (short)velocityByte, 0);
-       myOSCManager_->sendCC((short)commandByte, (short)noteByte);
-        
-      //Serial.print("Note : ");
-      //Serial.println(noteByte);
-       digitalWrite(D4,LOW);//turn on led
-    /*  if (commandByte == noteOn){//if note on message
-        //check if note == 60 and velocity > 0
-        if (noteByte == 60 && velocityByte > 0){
-          digitalWrite(13,HIGH);//turn on led
-        }
-      }*/
+      myOSCManager_->sendOSCMessage("/midi/voicelive", commandByte, value1, value2);
+
+      digitalWrite(D4,LOW);//turn on led
     }
   }
   while (Serial.available() > 2);//when at least three bytes available
