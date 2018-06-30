@@ -5,8 +5,8 @@
 #include <WiFiManager.h>         // https://github.com/tzapu/WiFiManager
 #include <WiFiClient.h>
 
-char ssid[] = "SFR_34A8";                   // your network SSID (name)
-char pass[] = "ab4ingrograstanstorc";       // your network password
+char ssid[] = "slyzic-hotspot";                   // your network SSID (name)
+char pass[] = "totototo";       // your network password
 
   
 #include "OSCManager.h"
