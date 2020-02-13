@@ -70,6 +70,6 @@ void checkMIDI(){
 
 void loop(){
   checkMIDI();
-  delay(100);
+  delay(10);
   digitalWrite(D4,HIGH);//turn led off
 }
