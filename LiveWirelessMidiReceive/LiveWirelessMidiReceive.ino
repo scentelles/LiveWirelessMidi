@@ -20,7 +20,7 @@ char pass[] = "totototo";       // your network password
 #define MIDI_ACTIVE_SENSING 0xFE
 
 OSCManager * myOSCManager_;
-
+OSCManager * myOSCManager2_;
 byte commandByte;
 byte value1;
 byte value2;
@@ -43,8 +43,12 @@ void setup(){
         digitalWrite(D4,LOW);                
     }
 
-  myOSCManager_ = new OSCManager(new IPAddress(10,3,141,1), 8000, 8886);
+  myOSCManager_ = new OSCManager(new IPAddress(10,3,141,3), 8000, 8886);
   myOSCManager_->setup();
+
+  myOSCManager2_ = new OSCManager(new IPAddress(10,3,141,2), 8000, 8886);
+  myOSCManager2_->setup();
+  
 }
 
 void checkMIDI(){
@@ -60,6 +64,7 @@ void checkMIDI(){
       if((commandByte != MIDI_CLOCK) and (commandByte != MIDI_ACTIVE_SENSING))
       {
         myOSCManager_->sendOSCMessage("/midi/voicelive", commandByte, value1, value2);
+        myOSCManager2_->sendOSCMessage("/midi/voicelive", commandByte, value1, value2);
         digitalWrite(D4,LOW);//turn on led
       }
     }
